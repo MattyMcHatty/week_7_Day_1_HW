@@ -4,21 +4,19 @@ import React, {useState} from 'react';
 function App() {
 
   const [tasks, setTasks] = useState([
-    {name: "Buy shopping", priority: true},
-    {name: "Clean bathroom", priority: false},
-    {name: "Car's MOT", priority: true}
+    {name: "Buy shopping", priority: "high"},
+    {name: "Clean bathroom", priority: "low"},
+    {name: "Car's MOT", priority: "high"}
   ])
 
   const [newTask, setNewTask] = useState("");
+  const [priority, setPriority] = useState("");
 
   const taskNodes = tasks.map((task, index) =>{
     return(
-    <li key = {index} className={task.priority ? "is-priority" : "isnt-priority"}>
-      <span>{task.name} </span>
-      {
-        task.priority ? <span className = "is-priority">High</span> :
-        <span className = "isnt-priority">Low</span>
-      }
+    <li key = {index} >
+
+      <span>{task.name} : {task.priority}</span>
       
     </li>   
     )
@@ -28,16 +26,14 @@ function App() {
     setNewTask(event.target.value);
   }
 
-  const handleOptionChange = (changeEvent) => {
-    this.setState({
-      selectedOption: changeEvent.target.value
-    });
+  const handlePrioritySelect = (event) =>{
+    setPriority(event.target.value);
   }
 
   const saveNewTask = (event) => {
     event.preventDefault();
     const copyTasks = [...tasks];
-    copyTasks.push({name: newTask, priority: this.state.selectedOption});
+    copyTasks.push({name: newTask, priority: priority});
     setTasks(copyTasks);
     setNewTask("");
   }
@@ -49,10 +45,13 @@ function App() {
       
       <form onSubmit={saveNewTask}>
         <input id = "new-task" type = "text" value={newTask} onChange={handleTaskInput}/>
-        <label for = "high">High</label>
-        <input type = "radio" id = "high" checked={this.state.selectedOption === true} onChange={handleOptionChange}></input>
-        <label for = "low">Low</label>
-        <input type = "radio" id = "low"checked={this.state.selectedOption === false} onChange={handleOptionChange}></input>
+
+        <label htmlFor = "high">High</label>
+        <input type = "radio" id = "high" name = "priority" value="high" onChange={handlePrioritySelect} ></input>
+
+        <label htmlFor = "low">Low</label>
+        <input type = "radio" id = "low" name ="priority" value="low" checked  onChange={handlePrioritySelect}></input>
+
         <input type="submit" value = "Save Task" />
       </form>
 
